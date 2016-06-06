@@ -8,12 +8,8 @@ defmodule TodoList do
     entry
   ) do
     entry = Map.put(entry, :id, auto_id)#set the new id to the entry passed
-
-    new_entries = Map.put(entries, auto_id, entry)#adding new entry to list
-    #reset the struct by updating the entries and the auto_id
-    #Map update sintax is  %{map_to_update | field: value, field1: value1}
-    #When using the update syntax (|), the VM is aware that no new keys will be added to the struct
-    %TodoList{ todo_list | entries: new_entries, auto_id: auto_id + 1}
+    new_entries = Map.put(entries, auto_id, entry)#set new entries variable to existing ones plus the one just added
+    %TodoList{ todo_list | entries: new_entries, auto_id: auto_id + 1}#reset todo_list
   end
 
 end
