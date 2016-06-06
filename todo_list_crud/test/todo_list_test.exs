@@ -30,4 +30,28 @@ defmodule TodoListTest do
       TodoList.add_entry(%{date: {2016, 05, 16}, title: "Second item"})
     assert actual == expected
   end
+
+  test "Can return 1 matching entries by date" do
+    expected = [%{date: {2016, 05, 15},  id: 1, title: "First item"}]
+    data = TodoList.new |>
+      TodoList.add_entry(%{date: {2016, 05, 15}, title: "First item"}) |>
+      TodoList.add_entry(%{date: {2016, 05, 16}, title: "Second item"})
+
+    actual = TodoList.entries(data, {2016, 05, 15})
+    assert actual == expected
+  end
+
+  test "Can return more than 1 matching entries by date" do
+    expected = [
+      %{date: {2016, 05, 15},  id: 1, title: "First item"},
+      %{date: {2016, 05, 15},  id: 3, title: "Third item"}
+    ]
+    data = TodoList.new |>
+      TodoList.add_entry(%{date: {2016, 05, 15}, title: "First item"}) |>
+      TodoList.add_entry(%{date: {2016, 05, 16}, title: "Second item"}) |>
+      TodoList.add_entry(%{date: {2016, 05, 15}, title: "Third item"})
+
+    actual = TodoList.entries(data, {2016, 05, 15})
+    assert actual == expected
+  end
 end
