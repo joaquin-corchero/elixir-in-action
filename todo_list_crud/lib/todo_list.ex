@@ -28,7 +28,8 @@ defmodule TodoList do
     case entries[entry_id] do
       nil -> todo_list
       old_entry ->
-        new_entry = updater_fun.(old_entry)
+        old_entry_id = old_entry.id
+        new_entry = %{id: ^old_entry_id} = updater_fun.(old_entry)
         new_entries = Map.put(entries, new_entry.id, new_entry)
         %TodoList{todo_list | entries: new_entries}
     end
