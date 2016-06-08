@@ -100,4 +100,23 @@ defmodule TodoListTest do
     actual = TodoList.delete_entry(data, 3)
     assert actual == expected
   end
+
+  test "Can add entries using a list of entries" do
+    entries = [
+      %{date: {2016, 6, 15}, title: "First item"},
+      %{date: {2016, 5, 16}, title: "Second item"}
+    ]
+
+    expected = %TodoList{
+      auto_id: 3,
+      entries: %{
+        1 => %{date: {2016, 6, 15}, id: 1, title: "First item"},
+        2 => %{date: {2016, 5, 16}, id: 2, title: "Second item"}
+      }
+    }
+
+    actual = TodoList.new(entries)
+
+    assert actual == expected
+  end
 end
