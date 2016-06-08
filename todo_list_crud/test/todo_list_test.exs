@@ -69,7 +69,6 @@ defmodule TodoListTest do
       TodoList.add_entry(%{date: {2016, 05, 16}, title: "Second item"})
 
     actual = TodoList.update_entry(data, 1, fn(item)-> Map.put(item, :date, {2016, 06, 15}) end)
-
     assert actual == expected
   end
 end
