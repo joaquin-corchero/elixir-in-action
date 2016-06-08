@@ -35,4 +35,13 @@ defmodule TodoList do
     end
   end
 
+  def delete_entry(%TodoList{ entries: entries, auto_id: auto_id} = todo_list, entry_id) do
+    case entries[entry_id] do
+      nil -> todo_list
+      old_entry ->
+        {_, new_entries} = Map.pop(entries, entry_id)
+        %TodoList{todo_list | entries: new_entries}
+    end
+  end
+
 end

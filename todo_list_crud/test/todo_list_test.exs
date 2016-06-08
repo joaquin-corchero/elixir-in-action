@@ -74,9 +74,9 @@ defmodule TodoListTest do
 
   test "Can delete an entry" do
     expected = %TodoList{
-      auto_id: 2,
+      auto_id: 3,
       entries: %{
-        1 => %{date: {2016, 5, 16}, id: 1, title: "Second item"}
+        2 => %{date: {2016, 5, 16}, id: 2, title: "Second item"}
       }
     }
 
@@ -86,4 +86,18 @@ defmodule TodoListTest do
 
     actual = TodoList.delete_entry(data, 1)
     assert actual == expected
+  end
+
+  test "Can not delete an entry that does not exist" do
+    expected =  %TodoList{auto_id: 3,
+            entries: %{1 => %{date: {2016, 5, 15}, id: 1, title: "First item"},
+              2 => %{date: {2016, 5, 16}, id: 2, title: "Second item"}}}
+
+    data = TodoList.new |>
+      TodoList.add_entry(%{date: {2016, 05, 15}, title: "First item"}) |>
+      TodoList.add_entry(%{date: {2016, 05, 16}, title: "Second item"})
+
+    actual = TodoList.delete_entry(data, 3)
+    assert actual == expected
+  end
 end
