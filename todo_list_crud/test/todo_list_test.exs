@@ -71,4 +71,19 @@ defmodule TodoListTest do
     actual = TodoList.update_entry(data, 1, fn(item)-> Map.put(item, :date, {2016, 06, 15}) end)
     assert actual == expected
   end
+
+  test "Can delete an entry" do
+    expected = %TodoList{
+      auto_id: 2,
+      entries: %{
+        1 => %{date: {2016, 5, 16}, id: 1, title: "Second item"}
+      }
+    }
+
+    data = TodoList.new |>
+      TodoList.add_entry(%{date: {2016, 05, 15}, title: "First item"}) |>
+      TodoList.add_entry(%{date: {2016, 05, 16}, title: "Second item"})
+
+    actual = TodoList.delete_entry(data, 1)
+    assert actual == expected
 end
