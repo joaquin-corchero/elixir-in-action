@@ -1,24 +1,35 @@
 defmodule TodoList.CsvImporter do
   def import(file_location) do
     file_location
-    |> TodoList.FileReader.get_lines
+    |> TodoList.FileLineReader.get_lines
     |> get_entries
     |> TodoList.new
   end
 
   defp get_entries(lines) do
-    lines
-    |> Enum.reduce([],
+    Enum.reduce(lines, [],
       fn(line, entries) ->
-        raw = String.split(line, ",")
-        date = get_date(String.split(raw[0], "/"))
-        entries.push(%{date: date, title: raw[1]})
+        entry = TodoList.EntryFromLine.convert(line)
+        List.insert_at(entries, -1, entry)
       end
     )
   end
+end
 
-  defp get_date([day, month, year]) do
-    {Integer.parse(year), Integer.parse(month), Integer.parse(day) }
+defmodule TodoList.EntryFromLine do
+  def convert(line) do
+    [date, title] = String.split(line, ",")
+    %{date: get_date(date), title: title}
+  end
+
+  defp get_date(date) do
+    [year, month, day] = String.split(date, "/")
+    {get_int(year), get_int(month), get_int(day)}
+  end
+
+  defp get_int(number) do
+    {value, _} = Integer.parse(number)
+    value
   end
 end
 
