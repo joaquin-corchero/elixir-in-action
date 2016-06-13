@@ -1,4 +1,4 @@
-defmodule TodoListTest do
+defmodule TodoListShould do
   use ExUnit.Case
 
   test "Can create a new todo list" do
