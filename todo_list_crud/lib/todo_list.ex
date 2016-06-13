@@ -17,7 +17,8 @@ defmodule TodoList do
 
   def from_file(file_location \\ "") do
     CsvReader.read(file_location)
-    |> Factory.create    
+    |> Factory.create
+    |> TodoList.new
   end
 
   def add_entry(
