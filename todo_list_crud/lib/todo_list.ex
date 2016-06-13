@@ -1,5 +1,7 @@
 defmodule TodoList do
   defstruct auto_id: 1, entries: Map.new
+  alias Infrastructure.CsvReader, as: CsvReader
+  alias Factories.TodoItemFactory, as: Factory
 
   def new, do: %TodoList{}#returns a new struct
 
@@ -11,6 +13,11 @@ defmodule TodoList do
         add_entry(todo_list_acc, entry)
       end
     )
+  end
+
+  def from_file(file_location \\ "") do
+    CsvReader.read(file_location)
+    |> Factory.create    
   end
 
   def add_entry(
