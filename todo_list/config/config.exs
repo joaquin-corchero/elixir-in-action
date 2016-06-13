@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :todo_list, key: :value
+#     config :todo_list_crud, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:todo_list, :key)
+#     Application.get_env(:todo_list_crud, :key)
 #
 # Or configure a 3rd-party app:
 #
