@@ -1,11 +1,9 @@
 defmodule TodoList do
   defstruct auto_id: 1, entries: Map.new
-  alias Infrastructure.CsvReader, as: CsvReader
-  alias Factories.TodoItemFactory, as: Factory
 
   def new, do: %TodoList{}#returns a new struct
 
-  def new(entries \\ []) do
+  def new(entries) do
     Enum.reduce(
       entries,
       %TodoList{},
@@ -13,12 +11,6 @@ defmodule TodoList do
         add_entry(todo_list_acc, entry)
       end
     )
-  end
-
-  def from_file(file_location \\ "") do
-    CsvReader.read(file_location)
-    |> Factory.create
-    |> TodoList.new
   end
 
   def add_entry(
@@ -53,10 +45,10 @@ defmodule TodoList do
     end
   end
 
-  def delete_entry(%TodoList{ entries: entries, auto_id: auto_id} = todo_list, entry_id) do
+  def delete_entry(%TodoList{ entries: entries, auto_id: _auto_id} = todo_list, entry_id) do
     case entries[entry_id] do
       nil -> todo_list
-      old_entry ->
+      _old_entry ->
         {_, new_entries} = Map.pop(entries, entry_id)
         %TodoList{todo_list | entries: new_entries}
     end
