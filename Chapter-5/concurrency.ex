@@ -1,5 +1,6 @@
 run_query = fn(query_def) ->
-  :timer.sleep(200)
+  :timer.sleep(2000)
+
   "#{query_def} result"
 end
 
@@ -48,3 +49,28 @@ receive_result = receive do
 end
 
 IO.inspect receive_result
+
+#Process communciation
+#caller stores the pid of the current process
+#spawn will start a new process
+#sends the message to the caller
+async_query = fn(query_def) ->
+  caller = self
+
+  spawn(fn ->
+    send(caller, {:query_result, run_query.(query_def)})
+  end)
+end
+
+#Calls the run_query and sends the results to the shell process
+1..5 |> Enum.each(&async_query.("query #{&1}"))
+
+#reading from the current process mailbox
+get_result = fn ->
+  receive do
+    {:query_result, result} -> result
+  end
+end
+
+#pull messages from the mailbox into a single list
+results = Enum.map(1..5, fn(_) -> get_result.() end)
