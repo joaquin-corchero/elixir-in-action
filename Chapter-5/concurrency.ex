@@ -74,3 +74,5 @@ end
 
 #pull messages from the mailbox into a single list
 results = Enum.map(1..5, fn(_) -> get_result.() end)
+
+#5.3 Statefull server process
