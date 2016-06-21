@@ -32,6 +32,19 @@ defmodule DatabaseServer do
     end
   end
 
+  def create_and_consume_server_pool do
+    #pool of database server processes
+    pool = 1..100 |> Enum.map(fn(_) -> DatabaseServer.start end)
+
+    #execute queries randomly using the pool
+    1.. 5 |> Enum.each(fn(query_def) ->
+      server_pid =  Enum.at(pool, :random.uniform(100) - 1)#selects the random process
+      DatabaseServer.run_async(server_pid,  query_def) #runs the query on the process
+    end)
+
+    1..5 |> Enum.map(fn(_) -> get_result end)
+  end
+
 end
 #to execute this:
 #load the file c("5_3_database_server.ex")
