@@ -1,6 +1,8 @@
 defmodule DatabaseServer do
   def start do
-    spawn(&loop/0)
+    spawn(fn ->
+      
+    end)
   end
 
   defp loop do
@@ -42,7 +44,7 @@ defmodule DatabaseServer do
       DatabaseServer.run_async(server_pid,  query_def) #runs the query on the process
     end)
 
-    1..5 |> Enum.map(fn(_) -> get_result end)
+    1..5 |> Enum.map(fn(_) -> DatabaseServer.get_result end)
   end
 
 end
