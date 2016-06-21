@@ -1,5 +1,5 @@
 run_query = fn(query_def) ->
-  :timer.sleep(2000)
+  :timer.sleep(1000)
 
   "#{query_def} result"
 end
@@ -39,7 +39,7 @@ end
 
 receive do
   message -> IO.inspect("Message received #{message}")
-after 2000 -> IO.puts "Message didn't make it in the maximum allocated time"
+after 1000 -> IO.puts "Message didn't make it in the maximum allocated time"
 end
 
 send(self, {:message, 1})
@@ -74,5 +74,3 @@ end
 
 #pull messages from the mailbox into a single list
 results = Enum.map(1..5, fn(_) -> get_result.() end)
-
-#5.3 Statefull server process
