@@ -1,24 +1,28 @@
 defmodule DatabaseServer do
-  def start do
+    def start do
     spawn(fn ->
-      
+      #keeping state
+      connection = :random.uniform(1000)
+      loop(connection)
     end)
   end
 
-  defp loop do
-    receive do #--> awaits for the message with that format
+  defp loop (connection) do
+    #awaits for the message with that format
+    receive do
       {:run_query, caller, query_def} ->
-        #runs the query and sends the results to the caller, with the pattern defined on the get_result
-        send(caller, {:query_result, run_query(query_def)})
+          #runs the query and sends the results to the caller, with the pattern defined on the get_result
+          query_result = run_query(connection, query_def)
+          send(caller, {:query_result, query_result})
     end
-
-    loop
+    #keep the connection in the loop argument
+    loop(connection)
   end
 
   #query execution
-  defp run_query(query_def) do
+  defp run_query(connection, query_def) do
     :timer.sleep(2000)
-    "#{query_def} result"
+    "Connection #{connection}: #{query_def} result"
   end
 
 #puts the query on the message queue that matches with the pattern defined on the loop function
