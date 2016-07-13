@@ -42,6 +42,14 @@ defmodule TodoServer do
       send(caller, {:todo_entries, TodoList.entries(todo_list, date)})
       todo_list
     end
+
+    def delete_entry(todo_server, entry_id) do
+      send(todo_server, {:delete_entry, entry_id})
+    end
+
+    defp process_message(todo_list, {:delete_entry, entry_id}) do
+      TodoList.delete_entry(todo_list, entry_id)
+    end
 end
 
 defmodule TodoList do
@@ -69,4 +77,25 @@ defmodule TodoList do
         entry
       end)
   end
+
+  def update_entry(%TodoList{ entries: entries} = todo_list, entry_id, updater_fun) do
+    case entries[entry_id] do
+      nil -> todo_list
+      old_entry ->
+        old_entry_id = old_entry.id
+        new_entry = %{id: ^old_entry_id} = updater_fun.(old_entry)
+        new_entries = Map.put(entries, new_entry.id, new_entry)
+        %TodoList{todo_list | entries: new_entries}
+    end
+  end
+
+  def delete_entry(%TodoList{ entries: entries, auto_id: _auto_id} = todo_list, entry_id) do
+    case entries[entry_id] do
+      nil -> todo_list
+      _old_entry ->
+        {_, new_entries} = Map.pop(entries, entry_id)
+        %TodoList{todo_list | entries: new_entries}
+    end
+  end
+
 end
